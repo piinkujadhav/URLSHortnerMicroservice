@@ -1,0 +1,6 @@
+@URLSHortnerMicroservice_HostAddress = http://localhost:5122
+
+GET {{URLSHortnerMicroservice_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
