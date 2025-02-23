@@ -1,7 +1,8 @@
-﻿namespace URLSHortnerMicroservice.Model
+﻿
+namespace URLShortnerMicroserivce.Model
 {
     /// <summary>
-    /// class representing the request attributes for the Api GetOrignalUrl
+    /// Class reprasenting the request attributes for the API GetOrignalUrl.
     /// </summary>
     public class GetOrignalUrlRequest
     {

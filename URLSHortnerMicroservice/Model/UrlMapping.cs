@@ -1,14 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
-namespace URLSHortnerMicroservice.Model
+namespace URLShortnerMicroserivce.Model
 {
     public class UrlMapping
     {
         [Key]
-        public string Id{ get; set; }
+        public int id { get; set; }
+
         [Required]
-        public  string shortUrl { get; set; }=string.Empty;
+        public string shortUrl { get; set; } = string.Empty;
+
         [Required]
-        public string longUrl{ get; set; }= string.Empty;
+        public string longUrl { get; set; } = string.Empty;
     }
 }

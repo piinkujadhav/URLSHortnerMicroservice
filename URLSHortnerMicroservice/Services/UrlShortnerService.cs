@@ -1,32 +1,65 @@
-﻿namespace URLSHortnerMicroservice.Services
+﻿
 
+using System;
+using Microsoft.EntityFrameworkCore;
+using URLShortnerMicroserivce.Model;
+using URLSHortnerMicroservice.Data;
+
+namespace URLShortnerMicroserivce.Services
 {
-    public class UrlShortnerService : IUrlShortnerServices
+    public class UrlShortenerService : IUrlShortenerServices
     {
-        private const string Alphabet = "ABCDEFGHIJKLMNOPQURSTUVWXYZ";
-        private Random random = new Random();
-        _random.next(); 
-        public Task<string?> GetOriginalUrlAsync(string shortCode);
-        { 
-        throw new NotImplementedException();  
+        private UrlshortenerContextxt _context = new UrlshortenerContextxt();
+
+        private const string Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        private Random _random = new Random();
+
+
+        /// <summary>
+        /// Retrieves the orignal URL associated with the given short URL.
+        /// </summary>
+        /// <param name="shortUrl">Instance of string indicating the short URL.</param>
+        /// <returns>The orignal URL if found; otherwise null.</returns>
+        public async Task<string?> GetOriginalUrlAsync(string shortUrl)
+        {
+
+            var response = await _context.UrlMappings.FirstOrDefaultAsync(s => s.shortUrl == shortUrl);
+            if (response != null)
+            {
+                return response.longUrl;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Shortnes an orignal URL by generating a unique code and storing into database.
+        /// </summary>
+        /// <param name="originalUrl">Instance of string indicating the orignal URL.</param>
+        /// <returns>The newley generated short URL.</returns>
+        public async Task<string> ShortenUrlAsync(string originalUrl)
+        {
+            var shortcode = GenerateShortCode();
+            var shortUrl = "newgen.ly" + shortcode;
+
+            var mapping = new UrlMapping();
+            mapping.shortUrl = shortUrl;
+            mapping.longUrl = originalUrl;
+
+            var response = await _context.UrlMappings.AddAsync(mapping);
+
+            await _context.SaveChangesAsync();
+            return response.Entity.shortUrl;
+        }
+
+
+
+        private string GenerateShortCode(int length = 6)
+        {
+            return new string(Enumerable.Repeat(Alphabet, length).Select(s => s[_random.Next(s.Length)]).ToArray());
+        }
 
 
     }
-       
-        public Task<string> ShortenUrlAsync(string originalUrl)
-        {
-            //valiation
-            //Genrate teh shortner code
-            //add prefix if needed
-            var shorturl = "newgen.ly" + shortcode;
-            var mapping = new UrlMapping(); 
-            mapping.shortUrl=shorturl;
-            mapping .longurl=shorturl;
-            //add into database
-            
-       
-       
-  }
-        }
-
 }
